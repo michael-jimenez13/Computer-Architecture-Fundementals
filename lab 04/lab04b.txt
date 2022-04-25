@@ -1,0 +1,28 @@
+.globl lab04b
+	lab04b:
+        //Multiply X0 and X1
+        //   Does not handle negative X1!
+        //   Note : This is an in efficient way to multipy!
+		SUB SP, SP, 16          //make room for X19 on the stack
+       	STUR X20, [SP, 0]       //push X19
+       	ADD X20, X0, XZR        //set X19 equal to X0
+       	ADD X10 , XZR , XZR      //set X9 to 0
+	loop:
+		CMP X20, 1 //compare x20 to 1
+		B.LE end // if x20 less than or equal to one go to end
+		SUB X10, X20, 1 //x10 = x20-1
+		MUL X1, X20, X10 //x1= n*(n-1)
+		SUB X20, X20, 1 //subtract x20= x20-1
+		BL again //go to again
+	 again:
+	 	CMP X10, 1 //compare x10 to 01
+	 	B.LE loop // go if x10 equals 1 then x20 =1
+	 	SUB X10, X10, 1 // X10 =n-1 subtract again
+	 	MUL X1, X1, X10 // n= n*(n-1)
+	 	SUB X20, X20, 1 //subtract x20
+	 	BL again
+	end:
+ 		LDUR X20, [SP, 0] //to pop
+        ADD SP, SP, 16 //to pop the information out of stack
+        ADD X0, X1, XZR         // Move X1 to X0 to return
+        BR X30
